@@ -1,0 +1,26 @@
+class Solution {
+  private:
+    void solve(stack<int>& s, int count, int size){
+        //base case
+        if(count == size/2){
+            s.pop();
+            return;
+        }
+        
+        int num = s.top();
+        s.pop();
+        
+        //Recursive call
+        solve(s, count+1, size);
+        
+        s.push(num);
+    }
+    
+  public:
+    // Function to delete middle element of a stack.
+    void deleteMid(stack<int>& s) {
+        int n = s.size();
+        int count = 0;
+        solve(s, count, n);
+    }
+};
