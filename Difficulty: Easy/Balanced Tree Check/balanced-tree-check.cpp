@@ -1,35 +1,73 @@
-//APPROACH-2 : 
+//APPROACH-3 : TC - O(N)
 class Solution {
-private:
-    int height(Node* root){
+public:
+    pair<bool, int> isBalancedFast(Node* root){
         //base case
         if(root == NULL){
-            return 0;
+            pair<bool, int> p = make_pair(true, 0);
+            return p;
         }
-        int left = height(root->left);
-        int right = height(root->right);
 
-        int ans = max(left, right) + 1;
-        return ans;
-    }    
-public:
-    bool isBalanced(Node* root) {
-        //base case
-        if (root == NULL) return true;
+        pair<int, int> left = isBalancedFast(root->left);
+        pair<int, int> right = isBalancedFast(root->right);
 
-        bool left = isBalanced(root->left);
-        bool right = isBalanced(root->right);
+        bool leftAns = left.first;
+        bool rightAns = right.first;
 
-        bool diff = abs(height(root->left) - height(root->right)) <= 1;
+        bool diff = abs(left.second - right.second) <= 1;
 
-        if(left && right && diff){
-            return true;
-        } 
+        pair<bool, int> ans;
+        ans.second = max(left.second, right.second) + 1;
+
+        if(leftAns && rightAns && diff){
+            ans.first = true;
+        }
         else{
-            return false;
+            ans.first = false;
         }
+        return ans;
+    }
+
+    bool isBalanced(Node* root) {
+        return isBalancedFast(root).first;
     }
 };
+
+
+
+
+//APPROACH-2 : 
+// class Solution {
+// private:
+//     int height(Node* root){
+//         //base case
+//         if(root == NULL){
+//             return 0;
+//         }
+//         int left = height(root->left);
+//         int right = height(root->right);
+
+//         int ans = max(left, right) + 1;
+//         return ans;
+//     }    
+// public:
+//     bool isBalanced(Node* root) {
+//         //base case
+//         if (root == NULL) return true;
+
+//         bool left = isBalanced(root->left);
+//         bool right = isBalanced(root->right);
+
+//         bool diff = abs(height(root->left) - height(root->right)) <= 1;
+
+//         if(left && right && diff){
+//             return true;
+//         } 
+//         else{
+//             return false;
+//         }
+//     }
+// };
 
 
 
