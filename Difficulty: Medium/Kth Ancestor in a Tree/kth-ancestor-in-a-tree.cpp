@@ -1,32 +1,77 @@
+//APPROACH 2 : TC = O(n) & SC = O(h) but in wc O(n) ->
 class Solution {
   public:
-    bool findPath(Node* root, int node, vector<int> &path){
-        if(root == NULL) return false;
+    Node* solve(Node* root, int &k, int node){
+        //base case
+        if(root == NULL) return NULL;
         
-        //add current node
-        path.push_back(root->data);
+        if(root->data == node) return root;
         
-        //node found
-        if(root->data == node) return true;
+        Node* leftAns = solve(root->left, k, node);
+        Node* rightAns = solve(root->right, k, node);
         
-        //search left or right
-        if(findPath(root->left, node, path) || findPath(root->right, node, path)){
-            return true;
+        if(leftAns != NULL && rightAns == NULL){
+            k--;
+            if(k <= 0){
+                k = INT_MAX;
+                return root;
+            }
+            return leftAns;
         }
         
-        //backtrack
-        path.pop_back();
-        return false;
+        if(leftAns == NULL && rightAns != NULL){
+            k--;
+            if(k <= 0){
+                k = INT_MAX;
+                return root;
+            }
+            return rightAns;
+        }
+        return NULL;
     }
     
     int kthAncestor(Node *root, int k, int node) {
-        vector<int> path;
-        
-        //check if node exists in a tree
-        if(!findPath(root, node, path)) return -1;
-        
-        if(path.size() <= k) return -1;
-        
-        return path[path.size() - k - 1];
+        Node* ans = solve(root, k, node);
+        if(ans == NULL || ans->data == node){
+            return -1;
+        }
+        else{
+            return ans->data;
+        }
     }
 };
+
+
+
+
+
+
+//APPROACH 1 : TC = O(n) & SC = O(n) ->
+// class Solution {
+//   public:
+//     bool findPath(Node* root, int node, vector<int> &path){
+//         if(root == NULL) return false;
+        
+//         path.push_back(root->data);    //add current node
+        
+//         if(root->data == node) return true;     //node found
+        
+//         //search left or right
+//         if(findPath(root->left, node, path) || findPath(root->right, node, path))
+//             return true;
+            
+//         path.pop_back();    //backtrack
+//         return false;
+//     }
+    
+//     int kthAncestor(Node *root, int k, int node) {
+//         vector<int> path;
+        
+//         //check if node exists in a tree
+//         if(!findPath(root, node, path)) return -1;
+        
+//         if(path.size() <= k) return -1;
+        
+//         return path[path.size() - k - 1];
+//     }
+// };
